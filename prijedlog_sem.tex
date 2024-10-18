@@ -1,0 +1,109 @@
+\documentclass{report}
+\usepackage{enumitem}
+\usepackage[table]{xcolor}
+\usepackage[croatian]{babel}
+\usepackage{longtable}
+\usepackage{tikz}
+\usepackage[most]{tcolorbox}
+\usepackage{tikz-3dplot}
+\usepackage{lscape}
+\usepackage{xargs}
+\usepackage{todonotes}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{mathtools}
+\usepackage{fontawesome}
+\usepackage{amsthm}
+
+\renewcommand{\thesection}{(\Roman{section}.) }
+
+\title{Detekcija konvergencije izvora kod proračuna kritičnosti MC metodom}
+
+\author{Fran Lubina}
+
+\begin{document}
+
+\maketitle
+
+\chapter*{prijedlog}
+Htio bih predloziti svoju mesh-free metriku za detekciju konvergencije.
+Rad na seminaru bi podijelio u slijedece etape:
+\begin{enumerate}[label=\arabic*)]
+	\item Formalna definicija metrike
+	\item Odabir statistickog testa
+	\item Implementacija metrike i testa
+	\item Validacija
+	\item Pisani dio seminara
+\end{enumerate}
+
+
+\section{FORMALNA DEFINICIJA METRIKE}
+zbroj K najvecih distanci za neki neutron.
+Distanca je neka distanca iz skupa svih mogucih međusobnih distanci neutrona trenutne i prosle fisijske banke.
+
+\begin{equation}
+KGPD = \sum_{d in K} d
+\end{equation}
+
+\begin{equation}
+\begin{split}
+K = \{d(i, j) : |M(i, j)| >= N - K\}, \\
+M(i. j) = \{d'(i', j') : d'(i', j') < d(i, j)\}, \\
+i,j \in [0, N-1], n_i \in  S^{(n)}, n_j \in S^{(n-1)}
+\end{split}
+\end{equation}
+
+\begin{longtable}{|p{90pt}|p{160pt}|p{160pt}|}
+	\hline
+	\textbf{izvor} & \textbf{ponašanje KGPD} & \textbf{ponašanje prostorne raspodjele} \\
+	\hline
+	\endhead % This repeats the header on each page
+	kovergiran & mali nasumicni pomaci oko E[.] & male promjene, eigenmod\\ \hline
+	nekovergiran & monoton rast & velike promjene\\ \hline
+\end{longtable}
+
+\section{STATISTIČKI TEST}
+Wilcoxonov test sume rangova.
+
+\section{IMPLEMENTACIJA}
+OPCIJE:
+\begin{enumerate}[label=\arabic*)]
+	\item moj kod
+	\item modificirana verzija vaseg licenciranog MCNP koda (kako su to Ueki et al. učinili)
+	\item modificirana verzija OpenMC-a
+\end{enumerate}
+
+Već sam implementirao 1.), ali nisam koliko brzo i tocno moj kod moze raditi sa primjerima za validaciju.
+Javim za 1-2 tjedna, ako bude potrebe ima dovoljno vremena da se ostvari 2.) ili 3.)
+
+\section{VALIDACIJA}
+Nad problemima koje su koristili Ueki et al.
+\begin{enumerate}
+\item Whitesideov keff-of-the-world
+\item Homogena kocka
+\item Bazen sa nukl. gorivom
+\end{enumerate}
+
+Ueki et al nisu koristili nikakve formalne metode verifikacije
+vec samo graficku usporedbu rezultat pomocu grafova i tablica.
+Ja cu postupiti isto.
+
+Potrebno je samo implementirati opisanu metriku, jer je Ueki vec
+implementirao ostale u svom radu nad istim problemima.
+Znaci usporedba se svodi na jednu tablicu i jedan graf.
+
+\section{Teorijska razmatranja}
+Koji $K/N$ je najbolji?
+
+
+
+\pagebreak
+\section*{Komentari}
+Ovakva metrika je jos jednostavnija za implementaciju nego NCDS.
+Vrijeme izvrsavanja je vjerovatno gore, ali to nije ni bitno jer elementi "petlje generacija"
+nemaju znatan ucinak na ukupno vrijeme.
+
+\end{document}
+
